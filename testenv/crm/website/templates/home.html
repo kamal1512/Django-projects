@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+    <style>
+        .table th {
+        text-align: left;
+    }
+
+    /* Reduce width of the last column */
+    .table td:last-child,
+    .table th:last-child {
+        width: 200px;  /* Adjust width as needed */
+        text-align: center;  /* Center the icon */
+    }
+
+    /* Ensure the icon remains small */
+    .fa-eye {
+        font-size: 16px;  /* Adjust icon size */
+    }
+    </style>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col" class="text-center">View Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if records %}
+                {% for record in records %}
+                    <tr>
+<!--                        <td>{{ record.id }}</td>-->
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ record.first_name }} {{ record.last_name }}</td>
+                        <td>{{ record.email }}</td>
+                        <td> <a href="{% url 'record' record.id %}">  <i class="fa-solid fa-eye"> </i></a></td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+    <br/>
+
+
+    {% else %}
+        <div class="col-md-6 offset-md-3">
+            <h1>Login</h1>
+            <br/>
+            <form method="POST" action="{% url 'home' %}">
+                {% csrf_token %}
+                <form>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="username" placeholder="Username" required>
+                    </div>
+                    <br/>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" name="password" placeholder="Password" required>
+                    </div>
+                    <br/>
+                    <button type="submit" class="btn btn-secondary">Login</button>
+                </form>
+            </form>
+        </div>
+    {% endif %}
+{% endblock %}
